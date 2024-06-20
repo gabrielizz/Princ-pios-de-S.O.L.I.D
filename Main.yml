@@ -1,0 +1,46 @@
+<?php
+/*
+* Curso de Engenharia de Software - UniEVANGÉLICA 
+* Disciplina de Programação Web 
+* Dev: Gabriel g . mesquita
+* DATA 21/06/2021
+/*
+include_once '../SRP/User.php';
+include_once '../OCP/UserRepository.php';
+include_once '../ISP/IEmailService.php';
+include_once '../ISP/IExportService.php';
+
+class EmailService implements IEmailService {
+    public function sendWelcomeEmail(User $user) {
+        // Send welcome email
+        mail($user->getEmail(), "Welcome", "Thank you for registering!");
+    }
+}
+
+class ExportService implements IExportService {
+    public function exportToCSV(array $users) {
+        $csv = "id, name, email\n";
+        foreach ($users as $user) {
+            $csv .= "{$user->getId()}, {$user->getName()}, {$user->getEmail()}\n";
+        }
+        file_put_contents('users.csv', $csv);
+    }
+}
+
+// Instanciação dos serviços
+$userRepository = new UserRepository();
+$emailService = new EmailService();
+$exportService = new ExportService();
+
+// Criação de um novo usuário
+$user = new User(1, "John Doe", "john@example.com", "secret");
+
+// Salvando o usuário
+$userRepository->save($user);
+
+// Enviando e-mail de boas-vindas
+$emailService->sendWelcomeEmail($user);
+
+// Exportando todos os usuários para CSV
+$users = $userRepository->getAllUsers();
+$exportService->exportToCSV($users);

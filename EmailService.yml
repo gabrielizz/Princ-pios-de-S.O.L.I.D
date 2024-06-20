@@ -1,0 +1,14 @@
+<?php
+/*
+* Curso de Engenharia de Software - UniEVANGÉLICA 
+* Disciplina de Programação Web 
+* Dev: Gabriel g . mesquita
+* DATA 21/06/2021
+/*
+
+include_once '../SRP/User.php';
+
+interface IEmailService {
+    public function sendWelcomeEmail(User $user);
+}
+?>
